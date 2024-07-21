@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:aria2/modules/aria2_protocol.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:aria2/aria2.dart';
@@ -7,7 +8,7 @@ import 'package:aria2/aria2.dart';
 void main() {
   test('test aria2', () async {
     Aria2c aria2c =
-        Aria2c('https://XXXXX/jsonrpc', "http", "XXXX");
+        Aria2c (rpcUrl:  'http://192.168.3.241:6800/jsonrpc', protocol:  Aria2ProtoCol.http, secret: '');
     var version = await aria2c.getVersion();
     print(version.toString());
 

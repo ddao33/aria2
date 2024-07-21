@@ -1,3 +1,5 @@
+import 'package:aria2/modules/aria2_protocol.dart';
+
 import 'aria2_methods.dart' as aria2_methods;
 import "package:json_rpc_2/json_rpc_2.dart" as json_rpc;
 import "package:web_socket_channel/io.dart";
@@ -7,13 +9,13 @@ import 'dart:convert';
 
 class Aria2Connection implements aria2_methods.Aria2Methods {
   // ignore: prefer_typing_uninitialized_variables
-  var _client;
+  json_rpc.Client? _client;
   String rpcUrl;
-  String protocol;
-  String secret = "";
+  Aria2ProtoCol protocol;
+  String secret;
 
-  Aria2Connection(this.rpcUrl, this.protocol, this.secret) {
-    if (protocol == 'websocket') {
+  Aria2Connection(this.rpcUrl, this.protocol, {this.secret ='',}) {
+    if (protocol == Aria2ProtoCol.websocket) {
       var _socket = IOWebSocketChannel.connect(rpcUrl);
       _client = json_rpc.Client(_socket.cast<String>());
     }
@@ -30,8 +32,8 @@ class Aria2Connection implements aria2_methods.Aria2Methods {
         params = [params];
       }
     }
-    if (protocol == 'websocket') {
-      return await _client.sendRequest(method, params);
+    if (protocol == Aria2ProtoCol.websocket) {
+      return await _client?.sendRequest(method, params);
     } else {
       var res = await Dio().post(rpcUrl, data: {
         'jsonrpc': '2.0',

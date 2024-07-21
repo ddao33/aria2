@@ -1,0 +1,1 @@
+enum Aria2ProtoCol{websocket,http}
